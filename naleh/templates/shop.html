@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<header>
+  <nav class="navbar p-2 navbar-expand-lg navbar-dark custom_navbar">
+    <div class="container-fluid">
+      <!-- Logo -->
+      <div>
+        <a href="{% url "index" %}">
+          <img class="img-fluid w-25 rounded" style="max-width: 220px;" 
+               src="{% static 'img/nalelogo.jpg' %}" alt="Logo">
+        </a>
+      </div>
+
+      <!-- Mobile toggle -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" 
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar items -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Left links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-2">
+            <a class="nav-link" aria-current="page" href="{% url "index" %}">Home</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link active" href="{% url "shop" %}">Shop</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="{% url "about" %}">About</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link " href="{% url "information" %}">Info</a>
+          </li>
+        </ul>
+
+        <form class="d-flex me-3 position-relative" method="get" role="search" action="{% url 'shop' %}"
+          autocomplete="off">
+          <input id="searchBox" class="form-control me-2" type="search" placeholder="Search products..."
+            aria-label="Search" name="q" />
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
+       <a class="nav-link p-3" href="#"
+   data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">
+
+  <!-- Cart Icon Wrapper -->
+  <div class="position-relative d-inline-block">
+    <!-- SVG Cart -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+         fill="currentColor" class="bi bi-cart text-white" viewBox="0 0 16 16">
+      <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 
+        0 0 1 .485.379L2.89 3H14.5a.5.5 
+        0 0 1 .491.592l-1.5 8A.5.5 
+        0 0 1 13 12H4a.5.5 
+        0 0 1-.491-.408L2.01 3.607 1.61 
+        2H.5a.5.5 0 0 1-.5-.5M3.102 
+        4l1.313 7h8.17l1.313-7zM5 
+        12a2 2 0 1 0 0 4 2 2 0 0 0 
+        0-4m7 0a2 2 0 1 0 0 4 2 2 0 
+        0 0 0-4m-7 1a1 1 0 1 1 0 2 
+        1 1 0 0 1 0-2m7 0a1 1 0 1 1 
+        0 2 1 1 0 0 1 0-2"/>
+    </svg>
+
+    <!-- Dynamic Badge -->
+    <span id="cart-count"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      0
+    </span>
+  </div>
+</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="container-fluid bg-dark py-4">
+  {% if query %}
+    <h4 class="text-white text-center mb-4">Showing results for "{{ query }}"</h4>
+  {% else %}
+    <h4 class="text-white text-center mb-4">All Products</h4>
+  {% endif %}
+
+ <div class="container-fluid bg-dark py-4">
+  <div class="row justify-content-center g-4">
+    {% for product in products %}
+    <div class="col-md-4 col-sm-6 col-6 d-flex justify-content-center product-card">
+      <div class="card bg-dark border-light text-white text-center d-flex flex-column"
+           style="width: 12rem; min-height: 20rem;">
+
+        <!-- 🖼️ Product Image -->
+        <div style="height: 10rem; overflow: hidden;">
+          {% if product.image %}
+          <img src="{{ product.image.url }}" loading="lazy"
+               class="card-img-top rounded mx-auto d-block"
+               style="width: 100%; height: 100%; object-fit: cover;"
+               alt="{{ product.title }}">
+          {% else %}
+          <img src="{% static 'img/default.jpg' %}" loading="lazy"
+               class="card-img-top rounded mx-auto d-block"
+               style="width: 100%; height: 100%; object-fit: cover;"
+               alt="No image">
+          {% endif %}
+        </div>
+
+        <!-- 📦 Card Body -->
+        <div class="card-body d-flex flex-column justify-content-between p-2 flex-grow-1">
+          <h6 class="card-title">{{ product.title }}</h6>
+          <p class="card-text fw-bold mb-2">₹{{ product.price }}</p>
+
+          <!-- ✅ View Button -->
+          <button class="btn btn-outline-info btn-sm mb-2"
+            data-bs-toggle="modal"
+            data-bs-target="#productModal"
+            data-title="{{ product.title }}"
+            data-price="{{ product.price }}"
+            data-description="{{ product.description }}"
+            data-id="{{ product.id }}"
+            data-image="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/default.jpg' %}{% endif %}">
+            View
+          </button>
+
+          <!-- 🛒 Add to Cart -->
+          <button class="btn btn-danger btn-sm add-to-cart-btn mt-auto" data-id="{{ product.id }}" type="button">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+<!-- ✅ Cart Offcanvas -->
+<div class="offcanvas offcanvas-end bg-dark text-white" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartLabel">
+  <div class="offcanvas-header">
+    <h5 id="cartLabel">🛒 Your Cart</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <!-- Cart Items -->
+    <ul id="cart-items" class="list-group list-group-flush"></ul>
+
+    <!-- Total -->
+    <div class="mt-3">
+      <h6 id="cart-total">Total: ₹0</h6>
+    </div>
+
+    <!-- Address Field -->
+    <div id="address-box" class="mt-3 d-none">
+      <textarea id="user-address" class="form-control" rows="3" placeholder="Enter your delivery address"></textarea>
+    </div>
+
+    <!-- Buttons -->
+    <div class="mt-3">
+      <button id="buy-now" class="btn btn-success w-100 mt-2">
+        Buy Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Product Details Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title" id="productModalLabel">Product Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row align-items-center">
+          <!-- Product Image -->
+          <div class="col-md-5 text-center">
+            <img id="modal-image" src="" class="img-fluid rounded shadow" alt="Product Image">
+          </div>
+
+          <!-- Product Info -->
+          <div class="col-md-7">
+            <h4 id="modal-title" class="fw-bold"></h4>
+            <p id="modal-price" class="text-success fw-bold fs-5"></p>
+            <p id="modal-description" class="text-light small"></p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-danger add-to-cart-btn mt-auto" data-id="{{ product.id }}" type="button">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const cartCount = document.getElementById("cart-count");
+  const cartItemsList = document.getElementById("cart-items");
+  const cartTotal = document.getElementById("cart-total");
+  const modal = document.getElementById("productModal");
+  const modalImage = document.getElementById("modal-image");
+  const modalTitle = document.getElementById("modal-title");
+  const modalPrice = document.getElementById("modal-price");
+  const modalDescription = document.getElementById("modal-description");
+  const modalAddToCartBtn = modal.querySelector(".add-to-cart-btn");
+
+  // 🛒 Local cart object
+  let cart = {};
+
+  // ✅ When "View" button clicked → populate modal
+  document.querySelectorAll("[data-bs-target='#productModal']").forEach(btn => {
+    btn.addEventListener("click", function () {
+      const title = this.dataset.title;
+      const price = this.dataset.price;
+      const description = this.dataset.description;
+      const image = this.dataset.image;
+      const id = this.dataset.id;
+
+      modalTitle.textContent = title;
+      modalPrice.textContent = "₹" + price;
+      modalDescription.textContent = description;
+      modalImage.src = image;
+
+      // Store ID on modal Add-to-Cart button
+      modalAddToCartBtn.dataset.id = id;
+      modalAddToCartBtn.dataset.title = title;
+      modalAddToCartBtn.dataset.price = price;
+    });
+  });
+
+  // ✅ Event delegation: handle *any* Add to Cart button (including modal)
+  document.body.addEventListener("click", function (e) {
+    if (e.target.classList.contains("add-to-cart-btn")) {
+      const btn = e.target;
+      const productId = btn.dataset.id;
+      const title = btn.dataset.title || btn.closest(".card-body").querySelector(".card-title").innerText;
+      const priceText = btn.dataset.price || btn.closest(".card-body").querySelector(".card-text").innerText.replace("₹", "");
+      const price = parseFloat(priceText);
+
+      // Add or increase quantity
+      if (cart[productId]) {
+        cart[productId].qty += 1;
+      } else {
+        cart[productId] = { title, price, qty: 1 };
+      }
+
+      updateCartUI();
+
+      // Open cart automatically
+      const offcanvas = new bootstrap.Offcanvas(document.getElementById("cartOffcanvas"));
+      offcanvas.show();
+    }
+  });
+
+  // ✅ Update Cart UI
+  function updateCartUI() {
+    const totalCount = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
+    if (cartCount) cartCount.textContent = totalCount;
+
+    cartItemsList.innerHTML = "";
+    let totalPrice = 0;
+    Object.values(cart).forEach(item => {
+      totalPrice += item.price * item.qty;
+      const li = document.createElement("li");
+      li.className = "list-group-item d-flex justify-content-between align-items-center bg-dark text-white border-secondary";
+      li.innerHTML = `
+        ${item.title} - ₹${item.price}
+        <span class="badge bg-danger rounded-pill">x ${item.qty}</span>
+      `;
+      cartItemsList.appendChild(li);
+    });
+
+    cartTotal.textContent = "Total: ₹" + totalPrice;
+  }
+
+  // ✅ Handle Buy Now → WhatsApp
+  document.getElementById("buy-now").addEventListener("click", function () {
+    const addressBox = document.getElementById("address-box");
+    const addressField = document.getElementById("user-address");
+
+    if (addressBox.classList.contains("d-none")) {
+      addressBox.classList.remove("d-none");
+      addressField.focus();
+      this.textContent = "Send to WhatsApp ✅";
+    } else {
+      let items = document.querySelectorAll("#cart-items li");
+      let cartText = "";
+      items.forEach((item, index) => {
+        cartText += `${index + 1}. ${item.textContent}\n`;
+      });
+
+      let total = document.getElementById("cart-total").textContent;
+      let address = addressField.value.trim();
+      if (address === "") {
+        alert("⚠️ Please enter your address before sending!");
+        return;
+      }
+
+      let phone = "918300299101"; // ✅ Change to your WhatsApp number
+      let message = `🛒 Order Details:\n${cartText}\n${total}\n\n📍 Address:\n${address}`;
+      let whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappURL, "_blank");
+    }
+  });
+});
+</script>
+          <div class="text-center border-top border-secondary pt-3">
+            <h6 class=" small text-white-50 mb-3">© 2025 NalehCosmetics. All Rights Reserved</h6>
+          </div>
+  {% endblock %}

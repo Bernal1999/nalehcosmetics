@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<header>
+  <nav class="navbar p-2 navbar-expand-lg navbar-dark custom_navbar">
+    <div class="container-fluid">
+      <!-- Logo -->
+      <div>
+        <a href="{% url 'index' %}">
+          <img class="img-fluid w-25 rounded" style="max-width: 220px;"
+               src="{% static 'img/nalelogo.jpg' %}" alt="Logo">
+        </a>
+      </div>
+
+      <!-- Mobile toggle -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar items -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Left links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-2">
+            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="{% url 'shop' %}">Shop</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="{% url 'about' %}">About</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="{% url 'information' %}">Info</a>
+          </li>
+        </ul>
+        <form class="d-flex me-3 position-relative" method="get" role="search" action="{% url 'shop' %}"
+          autocomplete="off">
+          <input id="searchBox" class="form-control me-2" type="search" placeholder="Search products..."
+            aria-label="Search" name="q" />
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+</header>
+<!-- Product Carousel Section -->
+<div class="container text-center mt-3 text-light">
+  <h2>Upcomming Updates</h2>
+</div>
+<div id="productCarousel" class="carousel slide bg-dark text-white py-5" data-bs-ride="carousel">
+  <div class="carousel-inner container">
+
+    {% for product in newproducts %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <div class="text-center">
+
+        <!-- Product Image -->
+        {% if product.image %}
+        <img src="{{ product.image.url }}" class="img-fluid rounded shadow-lg mb-4"
+             style="max-height: 400px; object-fit: cover; width: 100%;" alt="{{ product.title }}">
+        {% else %}
+        <img src="{% static 'img/default.jpg' %}" class="img-fluid rounded shadow-lg mb-4"
+             style="max-height: 400px; object-fit: cover; width: 100%;" alt="No image">
+        {% endif %}
+
+        <!-- Product Info -->
+        <h3 class="fw-bold mb-3">{{ product.title }}</h3>
+        <p class="fs-5 mb-4 px-3">
+          {{ product.description|default:"Stay tuned for exciting product launches crafted with natural ingredients and care." }}
+        </p>
+
+        <!-- Optional Button -->
+        <a href="#" class="btn btn-outline-light px-4 py-2 rounded-pill">View Details</a>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+
+  <!-- Carousel Controls -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+
+  <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<!-- Custom Style -->
+<style>
+  #productCarousel {
+    border-radius: 1rem;
+  }
+
+  #productCarousel .carousel-item {
+    min-height: 450px;
+    transition: transform 0.8s ease-in-out;
+  }
+
+  #productCarousel img {
+    border-radius: 1rem;
+    transition: transform 0.4s ease;
+  }
+
+  #productCarousel img:hover {
+    transform: scale(1.03);
+  }
+
+  #productCarousel .btn:hover {
+    background-color: #fff;
+    color: #000;
+  }
+
+  /* Better spacing for mobile */
+  @media (max-width: 768px) {
+    #productCarousel .carousel-item {
+      padding: 1rem;
+    }
+
+    #productCarousel img {
+      max-height: 300px;
+    }
+  }
+</style>
+
+
+{% endblock %}

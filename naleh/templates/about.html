@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<header>
+  <nav class="navbar p-2 navbar-expand-lg navbar-dark custom_navbar">
+    <div class="container-fluid">
+      <!-- Logo -->
+      <div>
+        <a href="{% url "index" %}">
+          <img class="img-fluid w-25 rounded" style="max-width: 220px;"
+               src="{% static 'img/nalelogo.jpg' %}" alt="Logo">
+        </a>
+      </div>
+
+      <!-- Mobile toggle -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar items -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Left links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-2">
+            <a class="nav-link" aria-current="page" href="{% url "index" %}">Home</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="{% url "shop" %}">Shop</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link active" href="{% url "about" %}">About</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="{% url "information" %}">Info</a>
+          </li>
+        </ul>
+
+        <form class="d-flex me-3 position-relative" method="get" role="search" action="{% url 'shop' %}"
+          autocomplete="off">
+          <input id="searchBox" class="form-control me-2" type="search" placeholder="Search products..."
+            aria-label="Search" name="q" />
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
+        <!-- Cart -->
+        <a class="nav-link p-3" href="#"
+           data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">
+          <div class="position-relative d-inline-block">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                 fill="currentColor" class="bi bi-cart text-white" viewBox="0 0 16 16">
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5
+                0 0 1 .485.379L2.89 3H14.5a.5.5
+                0 0 1 .491.592l-1.5 8A.5.5
+                0 0 1 13 12H4a.5.5
+                0 0 1-.491-.408L2.01 3.607 1.61
+                2H.5a.5.5 0 0 1-.5-.5M3.102
+                4l1.313 7h8.17l1.313-7zM5
+                12a2 2 0 1 0 0 4 2 2 0 0 0
+                0-4m7 0a2 2 0 1 0 0 4 2 2 0
+                0 0 0-4m-7 1a1 1 0 1 1 0 2
+                1 1 0 0 1 0-2m7 0a1 1 0 1 1
+                0 2 1 1 0 0 1 0-2"/>
+            </svg>
+            <span id="cart-count"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              0
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="container my-5">
+  <div class="card bg-dark text-white border-light shadow-lg p-4 rounded-3">
+    
+    <!-- Heading -->
+    <h3 class="text-center mb-4">✨ About <span class="text-warning">NalehCosmetics</span></h3>
+    <p class="lead text-center">
+      Crafted Natural Handmade Cosmetics with Care | Trusted Rebranding & Marketing | Customer Satisfaction First | 100% Reliable Delivery Service
+    </p>
+    <hr class="border-light">
+
+    <!-- Who We Are -->
+    <h4 class="mt-4">👩‍🔬 Who We Are</h4>
+    <p class="mt-2">
+      <strong>NalehCosmetics</strong> is a proud Tamil Nadu–based brand dedicated to creating natural handmade cosmetics rooted in <em>Siddha</em> and <em>Ayurveda</em>.  
+      We combine traditional herbal wisdom with modern skincare practices, delivering products that are pure, safe, and effective.
+    </p>
+    <p>
+      Founded in <strong>March 2025</strong> by our Creative Head & CEO <strong>Kavin J</strong>, NalehCosmetics was built on a mission:  
+      to offer premium, chemical-free skincare crafted with love, tradition, and authenticity.  
+    </p>
+    <p>Every product is handmade in small batches, ensuring freshness, purity, and personal attention in each jar, bottle, or pack.</p>
+
+    <hr class="border-light">
+
+    <!-- What We Do -->
+    <h4 class="mt-4">💡 What We Do</h4>
+    <ul class="list-unstyled mt-2">
+      <li>🌿 <strong>Handmade Cosmetics</strong> – Crafted with herbs, oils, and Ayurvedic formulas for safe and healthy skincare.</li>
+      <li>🔄 <strong>Rebranding & Marketing</strong> – Refining and rebranding select raw-material products into premium-quality offerings.</li>
+      <li>🤝 <strong>Customer-Focused Service</strong> – Premium products with premium-level service, delivery, and support.</li>
+    </ul>
+
+    <hr class="border-light">
+
+    <!-- Our Promise -->
+    <h4 class="mt-4">🤲 Our Promise</h4>
+    <ul class="list-unstyled mt-2">
+      <li>✔ <strong>Premium Quality</strong> – Freshly handcrafted, chemical-free products with guaranteed quality and quantity.</li>
+      <li>✔ <strong>Customer Support 24/7</strong> – Available anytime via call, email, or WhatsApp.</li>
+      <li>✔ <strong>Safe & Reliable Delivery</strong> – Track your products until they arrive at your doorstep.</li>
+      <li>✔ <strong>Hassle-Free Returns</strong> – Valid issues resolved with easy returns or replacements.</li>
+    </ul>
+
+    <hr class="border-light">
+
+    <!-- Our Mission -->
+    <h4 class="mt-4">🎯 Our Mission</h4>
+    <p class="mt-2">
+      To promote clean and healthy skincare through natural handmade cosmetics that nourish the skin 
+      without compromising on safety, purity, or effectiveness.
+    </p>
+
+    <hr class="border-light">
+
+    <!-- Our Roots -->
+    <h4 class="mt-4">🌍 Our Roots</h4>
+    <p class="mt-2">
+      We are proudly located in <strong>Kalkulam Taluk, Kanyakumari District, Tamil Nadu, India</strong>.  
+      As a proprietorship business, we stay grounded in our values—offering products that are gentle on your skin and kind to the earth.
+    </p>
+
+    <hr class="border-light">
+
+    <!-- Why Choose Us -->
+    <h4 class="mt-4 text-warning">💖 Why Choose NalehCosmetics?</h4>
+    <p class="mt-3">
+      At NalehCosmetics, every product is more than skincare—it’s a promise of purity, care, and tradition. Here’s why our customers trust us:
+    </p>
+
+    <ul class="list-unstyled mt-3">
+      <li>🌿 <strong>Handcrafted with Care</strong> – Each product is carefully handmade in small batches, preserving natural richness and ensuring premium quality.</li>
+      <li>🍃 <strong>Made from Nature</strong> – Infused with herbs, essential oils, and plant-based ingredients for gentle, effective results.</li>
+      <li>🚫 <strong>No Harsh Chemicals</strong> – We never use parabens, sulfates, or synthetic fragrances — only clean, safe, and natural care.</li>
+      <li>💧 <strong>Skin-Loving Formulas</strong> – Designed for all skin types with clear product information for confident purchases.</li>
+      <li>🏡 <strong>Locally Produced, Globally Loved</strong> – Proudly crafted in Tamil Nadu, shipped with love across India.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="text-center border-top border-secondary pt-3">
+  <h6 class="small text-white-50 mb-3">© 2025 NalehCosmetics. All Rights Reserved</h6>
+</div>
+{% endblock %}
