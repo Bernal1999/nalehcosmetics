@@ -28,6 +28,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*","nalehcosmetics.com"]
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Application definition
 
@@ -136,5 +146,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "bernaldarwin@gmail.com"        # your email
 EMAIL_HOST_PASSWORD = "Kavin@123"       # app password (not normal password!)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 
