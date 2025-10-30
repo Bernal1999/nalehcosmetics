@@ -1,1 +1,1 @@
-web: gunicorn Nalecosmetics.wsgi
+web: gunicorn Nalecosmetic.wsgi
