@@ -1,0 +1,106 @@
+.navbar{
+    position: sticky;
+}
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+        img.fullscreen {
+      width: 100%;
+      height: 100%;
+      max-width: 100vw;
+      max-height: 100vh;
+    }
+
+    .slogan-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+      padding: 10px 0;
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+
+    .slogan-text {
+      display: inline-block;
+      white-space: nowrap;
+      letter-spacing: 0.5cap;
+      color: #f70505;
+      font-size: 1.6rem;
+      font-weight: 1000;
+      padding-left: 100%;
+      animation: scroll-left 15s linear infinite;
+    }
+
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+    /* Card fade & slide animation */
+.product-card {
+  transform: translateY(20px);
+  animation: fadeSlideIn 0.6s ease-out forwards;
+}
+
+/* Fade + slide keyframes */
+@keyframes fadeSlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom_navbar {
+  position: relative;
+  width: 100%;
+  border-bottom: 2px solid aliceblue;
+  z-index: 1000;
+  overflow: hidden; /* keep shimmer inside */
+}
+
+.custom_navbar {
+  position: relative;
+  width: 100%;
+  background-color: #000; /* dark base */
+  border-bottom: 2px solid aliceblue;
+  z-index: 1000;
+  overflow: hidden; /* keep shimmer inside */
+}
+
+/* shimmer overlay */
+.custom_navbar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  border-radius: 120px;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  animation: shimmer 4s linear infinite;
+  z-index: 0; /* behind links but above black background */
+}
+
+/* animation movement */
+@keyframes shimmer {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(50%); }
+}
+
+/* keep navbar content above shimmer */
+.custom_navbar * {
+  position: relative;
+  z-index: 1;
+}
