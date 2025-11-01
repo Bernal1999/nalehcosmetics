@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-_j*&=#b5xkj!_6jky3a$fgbsoxlfp5w^&o79m8jb4)_0p%m=-t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["nalehcosmetics-6.onrender.com","nalehcosmetics.com/"]
+ALLOWED_HOSTS = ["nalehcosmetics.com"]
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -146,6 +146,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "bernaldarwin@gmail.com"        # your email
 EMAIL_HOST_PASSWORD = "Kavin@123"       # app password (not normal password!)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 
 
