@@ -14,3 +14,6 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Nalecosmetic.settings')
 
 application = get_wsgi_application()
+
+from Nalecosmetic.auto_create_superuser import run as create_superuser
+create_superuser()
