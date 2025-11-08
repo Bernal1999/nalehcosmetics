@@ -150,6 +150,7 @@ EMAIL_HOST_PASSWORD = "Kavin@123"       # app password (not normal password!)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
+import Nalecosmetic.create_superuser
 
 
 
