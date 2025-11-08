@@ -93,12 +93,14 @@ WSGI_APPLICATION = 'Nalecosmetic.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
-
 DATABASES = {
-    'default': dj_database_url.parse(
-        'postgresql://mydb_5ib8_user:HCyFIN508qS4RAe70ybzHQQUu54VUqYx@dpg-d47cogshg0os73fjd1m0-a/mydb_5ib8'
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
     )
 }
+
 
 
 
@@ -155,6 +157,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "bernaldarwin@gmail.com"        # your email
 EMAIL_HOST_PASSWORD = "Kavin@123"       # app password (not normal password!)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 
 
