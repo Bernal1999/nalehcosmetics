@@ -141,7 +141,7 @@
             data-bs-target="#productModal"
             data-title="{{ product.title }}"
             data-price="{{ product.price }}"
-            data-description="{{ product.description |linebreaks}}"
+            data-description="{{ product.description}}"
             data-id="{{ product.id }}"
             data-image="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/default.jpg' %}{% endif %}">
             View
@@ -538,3 +538,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   {% endblock %}
+
