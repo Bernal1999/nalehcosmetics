@@ -11,3 +11,11 @@ urlpatterns = [
     path("contact/", views.contact_view, name="contact"),
     path('upcoming_products',views.upcoming_products,name='upcoming_products'),
 ]
+# urls.py
+from django.urls import path
+from .views import create_admin
+
+urlpatterns = [
+    path("create-admin/", create_admin),
+    # ... your other urls
+]
