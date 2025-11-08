@@ -67,4 +67,14 @@ def contact_view(request):
 
 def upcoming_products(request):
     newproducts = NewProducts.objects.all()
+
     return render (request,'upcoming_products.html',{"newproducts":newproducts})
+
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+def create_admin(request):
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser("Kavin", "nalehcosmetics@gmail.com", "Kavin@123")
+        return HttpResponse("✅ Superuser created!")
+    return HttpResponse("ℹ️ Superuser already exists.")
