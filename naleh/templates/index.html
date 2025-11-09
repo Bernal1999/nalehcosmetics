@@ -245,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       modalTitle.textContent = title;
       modalPrice.textContent = "₹" + price;
-      modalDescription.textContent = description;
+      modalDescription.innerHTML = description.replace(/\n/g, "<br>");
       modalImage.src = image;
 
       // Store ID on modal Add-to-Cart button
@@ -538,4 +538,5 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   {% endblock %}
+
 
