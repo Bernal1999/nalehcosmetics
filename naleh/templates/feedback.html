@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<header>
+  <nav class="navbar p-2 navbar-expand-lg navbar-dark custom_navbar">
+    <div class="container-fluid">
+      <!-- Logo -->
+      <div>
+        <a href="{% url 'index' %}">
+          <img class="img-fluid w-25 rounded" style="max-width: 220px;"
+               src="{% static 'img/nalelogo.jpg' %}" alt="Logo">
+        </a>
+      </div>
+
+      <!-- Mobile toggle -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar items -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-2"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
+          <li class="nav-item mx-2"><a class="nav-link" href="{% url 'shop' %}">Shop</a></li>
+          <li class="nav-item mx-2"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+          <li class="nav-item mx-2"><a class="nav-link" href="{% url 'information' %}">Info</a></li>
+        </ul>
+
+        <!-- Search -->
+        <form class="d-flex me-3 position-relative" method="get" action="{% url 'shop' %}">
+          <input class="form-control me-2" type="search" placeholder="Search products..." name="q">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
+        <!-- Cart -->
+        <a class="nav-link p-3" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+          <div class="position-relative d-inline-block">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                 fill="currentColor" class="bi bi-cart text-white" viewBox="0 0 16 16">
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 
+                       3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 
+                       13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 
+                       1.61 2H.5a.5.5 0 0 1-.5-.5"/>
+            </svg>
+            <span id="cart-count"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              0
+            </span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </nav>
+</header>
+
+
+<!-- Feedback Section -->
+<div class="container my-5">
+  <div class="card bg-dark text-white border-light shadow-lg p-4 rounded-3">
+
+    <h3 class="text-center mb-4">
+      ✨ We Value Your <span class="text-warning">Feedback</span>
+    </h3>
+    <p class="lead text-center">
+      Tell us what you love, suggest improvements, or share your thoughts —  
+      your feedback helps NalehCosmetics grow better every day.
+    </p>
+
+    <hr class="border-light">
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} text-center">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" class="mt-4">
+      {% csrf_token %}
+
+      <!-- Name -->
+      <div class="mb-3">
+        <label class="form-label">Your Name</label>
+        <input type="text" name="name" class="form-control bg-dark text-white border-secondary"
+               placeholder="Enter your name" required>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label">Your Email</label>
+        <input type="email" name="email" class="form-control bg-dark text-white border-secondary"
+               placeholder="Enter your email" required>
+      </div>
+
+      <!-- Feedback -->
+      <div class="mb-3">
+        <label class="form-label">Your Feedback</label>
+        <textarea name="feedback" rows="5"
+                  class="form-control bg-dark text-white border-secondary"
+                  placeholder="Write your feedback here..." required></textarea>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn-warning text-dark w-100 fw-bold">
+        Submit Feedback
+      </button>
+    </form>
+
+  </div>
+</div>
+
+
+<!-- Footer -->
+<div class="text-center border-top border-secondary pt-3">
+  <h6 class="small text-white-50 mb-3">© 2025 NalehCosmetics. All Rights Reserved</h6>
+</div>
+
+{% endblock %}
