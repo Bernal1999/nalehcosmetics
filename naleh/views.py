@@ -3,6 +3,7 @@ from .models import Product,NewProducts
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.conf import settings
 
 # Create your views here.
 
@@ -78,3 +79,35 @@ def create_admin(request):
         User.objects.create_superuser("Kavin", "nalehcosmetics@gmail.com", "Kavin@123")
         return HttpResponse("✅ Superuser created!")
     return HttpResponse("ℹ️ Superuser already exists.")
+
+def feedback_view(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        feedback = request.POST.get("feedback")
+
+        subject = f"New Feedback from {name}"
+        body = f"""
+        You received new feedback:
+
+        Name: {name}
+        Email: {email}
+        Feedback: {feedback}
+        """
+
+        try:
+            send_mail(
+                subject,
+                body,
+                settings.DEFAULT_FROM_EMAIL,
+                ["your_email@gmail.com"],     # Change to your receiving email
+                headers={"Reply-To": email},
+            )
+            messages.success(request, "✅ Thank you! Your feedback has been sent.")
+        except Exception as e:
+            messages.error(request, f"❌ Failed to send feedback: {e}")
+
+        return redirect("feedback")
+
+    return render(request, "feedback.html")
+
