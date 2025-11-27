@@ -10,4 +10,6 @@ urlpatterns = [
     path("information/",views.information,name="information"),
     path("contact/", views.contact_view, name="contact"),
     path('upcoming_products',views.upcoming_products,name='upcoming_products'),
+    path("feedback/", views.feedback_view, name="feedback"),
 ]
+
