@@ -57,7 +57,7 @@ def contact_view(request):
         """
 
         try:
-            send_mail(subject, body, email, ["your_email@gmail.com"])
+            send_mail(subject, body, email, ["nalehcosmetics@gmail.com"])
             messages.success(request, "✅ Message sent successfully!")
         except:
             messages.error(request, "❌ Failed to send message. Please try again.")
@@ -100,7 +100,7 @@ def feedback_view(request):
                 subject,
                 body,
                 settings.DEFAULT_FROM_EMAIL,
-                ["your_email@gmail.com"],     # Change to your receiving email
+                ["nalehcosmetics@gmail.com"],     # Change to your receiving email
                 headers={"Reply-To": email},
             )
             messages.success(request, "✅ Thank you! Your feedback has been sent.")
@@ -110,4 +110,5 @@ def feedback_view(request):
         return redirect("feedback")
 
     return render(request, "feedback.html")
+
 
