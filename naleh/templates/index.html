@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       modalTitle.textContent = title;
       modalPrice.textContent = "₹" + price;
-      modalDescription.textContent = description;
+      modalDescription.innerHTML = description.replace(/\n/g, "<br>");
 
       modalImage.src = img1;
       document.getElementById("thumb1").src = img1;
@@ -631,6 +631,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   {% endblock %}
+
 
 
 
