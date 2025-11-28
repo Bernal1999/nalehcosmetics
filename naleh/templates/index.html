@@ -106,7 +106,7 @@
         <div class="carousel-inner rounded">
 
           <div class="carousel-item active">
-            <img src="{% static 'img/upcome1.png' %}" class="d-block w-100 img-fluid rounded" alt="Slide 1">
+            <img src="{% static 'img/upcome1.jpg' %}" class="d-block w-100 img-fluid rounded" alt="Slide 1">
           </div>
 
           <div class="carousel-item">
@@ -131,6 +131,15 @@
       </div>
 
     </div>
+<style>
+  /* Fixed height for carousel */
+  #bannerCarousel .carousel-item img {
+    height: 350px;        /* Change height as per your design */
+    width: 100%;
+    object-fit: cover;    /* Ensures image fills area without distortion */
+    object-position: center;
+  }
+</style>
 
     <!-- Text Section -->
     <div class="col-md-6 col-12 mt-4 align-middle text-white text-center">
@@ -179,17 +188,18 @@
           <h6 class="card-title">{{ product.title }}</h6>
           <p class="card-text fw-bold mb-2">₹{{ product.price }}</p>
 
-          <!-- ✅ View Button -->
-          <button class="btn btn-outline-info btn-sm mb-2"
-            data-bs-toggle="modal"
-            data-bs-target="#productModal"
-            data-title="{{ product.title }}"
-            data-price="{{ product.price }}"
-            data-description="{{ product.description}}"
-            data-id="{{ product.id }}"
-            data-image="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/default.jpg' %}{% endif %}">
+        <button class="btn btn-outline-info btn-sm mb-2"
+                data-bs-toggle="modal"
+                data-bs-target="#productModal"
+                data-title="{{ product.title }}"
+                data-price="{{ product.price }}"
+                data-description="{{ product.description }}"
+                data-id="{{ product.id }}"
+                data-image="{{ product.image.url }}"
+                data-image2="{% if product.image2 %}{{ product.image2.url }}{% else %}""{% endif %}"
+                data-image3="{% if product.image3 %}{{ product.image3.url }}{% else %}""{% endif %}">
             View
-          </button>
+        </button>
 
           <!-- 🛒 Add to Cart -->
           <button class="btn btn-danger btn-sm add-to-cart-btn mt-auto" data-id="{{ product.id }}" type="button">
@@ -231,7 +241,6 @@
     </div>
   </div>
 </div>
-
 <!-- ✅ Product Details Modal -->
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -240,11 +249,19 @@
         <h5 class="modal-title" id="productModalLabel">Product Details</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
+
       <div class="modal-body">
         <div class="row align-items-center">
+
           <!-- Product Image -->
           <div class="col-md-5 text-center">
-            <img id="modal-image" src="" class="img-fluid rounded shadow" alt="Product Image">
+            <img id="modal-image" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;">
+
+            <div class="d-flex gap-2 justify-content-center">
+              <img id="thumb1" class="thumb-img rounded" style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;">
+              <img id="thumb2" class="thumb-img rounded" style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;">
+              <img id="thumb3" class="thumb-img rounded" style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;">
+            </div>
           </div>
 
           <!-- Product Info -->
@@ -255,96 +272,127 @@
           </div>
         </div>
       </div>
+
+      <!-- Footer -->
       <div class="modal-footer border-secondary">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button class="btn btn-danger add-to-cart-btn mt-auto" data-id="{{ product.id }}" type="button">Add to Cart</button>
+        <button class="btn btn-danger add-to-cart-btn" id="modal-add-to-cart" type="button">Add to Cart</button>
       </div>
+
     </div>
   </div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+
   const cartCount = document.getElementById("cart-count");
   const cartItemsList = document.getElementById("cart-items");
   const cartTotal = document.getElementById("cart-total");
-  const modal = document.getElementById("productModal");
   const modalImage = document.getElementById("modal-image");
   const modalTitle = document.getElementById("modal-title");
   const modalPrice = document.getElementById("modal-price");
   const modalDescription = document.getElementById("modal-description");
-  const modalAddToCartBtn = modal.querySelector(".add-to-cart-btn");
+  const modalAddToCartBtn = document.getElementById("modal-add-to-cart");
 
-  // 🛒 Local cart object
-  let cart = {};
+  let cart = {}; // 🛒 Cart stored locally
 
-  // ✅ When "View" button clicked → populate modal
+  /* -----------------------------------------------------------
+     ✅ 1. OPEN MODAL + LOAD PRODUCT DATA
+  ----------------------------------------------------------- */
   document.querySelectorAll("[data-bs-target='#productModal']").forEach(btn => {
     btn.addEventListener("click", function () {
+
       const title = this.dataset.title;
       const price = this.dataset.price;
       const description = this.dataset.description;
-      const image = this.dataset.image;
+      const img1 = this.dataset.image;
+      const img2 = this.dataset.image2 || img1;
+      const img3 = this.dataset.image3 || img1;
       const id = this.dataset.id;
 
       modalTitle.textContent = title;
       modalPrice.textContent = "₹" + price;
-      modalDescription.innerHTML = description.replace(/\n/g, "<br>");
-      modalImage.src = image;
+      modalDescription.textContent = description;
 
-      // Store ID on modal Add-to-Cart button
+      modalImage.src = img1;
+      document.getElementById("thumb1").src = img1;
+      document.getElementById("thumb2").src = img2;
+      document.getElementById("thumb3").src = img3;
+
       modalAddToCartBtn.dataset.id = id;
       modalAddToCartBtn.dataset.title = title;
       modalAddToCartBtn.dataset.price = price;
     });
   });
 
-  // ✅ Event delegation: handle *any* Add to Cart button (including modal)
-  document.body.addEventListener("click", function (e) {
-    if (e.target.classList.contains("add-to-cart-btn")) {
-      const btn = e.target;
-      const productId = btn.dataset.id;
-      const title = btn.dataset.title || btn.closest(".card-body").querySelector(".card-title").innerText;
-      const priceText = btn.dataset.price || btn.closest(".card-body").querySelector(".card-text").innerText.replace("₹", "");
-      const price = parseFloat(priceText);
-
-      // Add or increase quantity
-      if (cart[productId]) {
-        cart[productId].qty += 1;
-      } else {
-        cart[productId] = { title, price, qty: 1 };
-      }
-
-      updateCartUI();
-
-      // Open cart automatically
-      const offcanvas = new bootstrap.Offcanvas(document.getElementById("cartOffcanvas"));
-      offcanvas.show();
+  /* -----------------------------------------------------------
+     ✅ 2. THUMBNAIL CLICK → CHANGE MAIN IMAGE
+  ----------------------------------------------------------- */
+  document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("thumb-img")) {
+      modalImage.src = e.target.src;
     }
   });
 
-  // ✅ Update Cart UI
+  /* -----------------------------------------------------------
+     ✅ 3. ADD TO CART (Modal + Card Buttons)
+  ----------------------------------------------------------- */
+  document.body.addEventListener("click", function (e) {
+    if (e.target.classList.contains("add-to-cart-btn")) {
+
+      const btn = e.target;
+      const productId = btn.dataset.id;
+      const title = btn.dataset.title;
+      const price = parseFloat(btn.dataset.price);
+
+      if (!title || !price) {
+        console.warn("❌ Missing title/price in button dataset.");
+        return;
+      }
+
+      if (cart[productId]) cart[productId].qty += 1;
+      else cart[productId] = { title, price, qty: 1 };
+
+      updateCartUI();
+
+      // Open cart sidebar automatically
+      const canvasEl = document.getElementById("cartOffcanvas");
+      if (canvasEl) new bootstrap.Offcanvas(canvasEl).show();
+    }
+  });
+
+  /* -----------------------------------------------------------
+     ✅ 4. UPDATE CART UI
+  ----------------------------------------------------------- */
   function updateCartUI() {
     const totalCount = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
     if (cartCount) cartCount.textContent = totalCount;
 
     cartItemsList.innerHTML = "";
     let totalPrice = 0;
+
     Object.values(cart).forEach(item => {
       totalPrice += item.price * item.qty;
+
       const li = document.createElement("li");
-      li.className = "list-group-item d-flex justify-content-between align-items-center bg-dark text-white border-secondary";
+      li.className =
+        "list-group-item d-flex justify-content-between align-items-center bg-dark text-white border-secondary";
+
       li.innerHTML = `
         ${item.title} - ₹${item.price}
         <span class="badge bg-danger rounded-pill">x ${item.qty}</span>
       `;
+
       cartItemsList.appendChild(li);
     });
 
     cartTotal.textContent = "Total: ₹" + totalPrice;
   }
 
-  // ✅ Handle Buy Now → WhatsApp
+  /* -----------------------------------------------------------
+     ✅ 5. BUY NOW → SEND TO WHATSAPP
+  ----------------------------------------------------------- */
   document.getElementById("buy-now").addEventListener("click", function () {
     const addressBox = document.getElementById("address-box");
     const addressField = document.getElementById("user-address");
@@ -353,28 +401,30 @@ document.addEventListener("DOMContentLoaded", function () {
       addressBox.classList.remove("d-none");
       addressField.focus();
       this.textContent = "Send to WhatsApp ✅";
-    } else {
-      let items = document.querySelectorAll("#cart-items li");
-      let cartText = "";
-      items.forEach((item, index) => {
-        cartText += `${index + 1}. ${item.textContent}\n`;
-      });
-
-      let total = document.getElementById("cart-total").textContent;
-      let address = addressField.value.trim();
-      if (address === "") {
-        alert("⚠️ Please enter your address before sending!");
-        return;
-      }
-
-      let phone = "918300299101"; // ✅ Change to your WhatsApp number
-      let message = `🛒 Order Details:\n${cartText}\n${total}\n\n📍 Address:\n${address}`;
-      let whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-      window.open(whatsappURL, "_blank");
+      return;
     }
+
+    // Convert cart UI items to WhatsApp text lines
+    let items = document.querySelectorAll("#cart-items li");
+    let cartText = "";
+    items.forEach((item, index) => {
+      cartText += `${index + 1}. ${item.textContent}\n`;
+    });
+
+    let total = cartTotal.textContent;
+    let address = addressField.value.trim();
+    if (!address) return alert("⚠️ Please enter your address before sending!");
+
+    let phone = "918300299101";
+    let message = `🛒 *Order Details:*\n${cartText}\n${total}\n\n📍 *Address:*\n${address}`;
+    let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(url, "_blank");
   });
+
 });
 </script>
+
 <div class="container mt-4 p-2">
   <div class="row align-items-center">
     
@@ -581,6 +631,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   {% endblock %}
+
 
 
 
