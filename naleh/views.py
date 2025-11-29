@@ -40,7 +40,7 @@ def search(request):
 
 def information(request):
     return render(request,'information.html')
-
+    
 def contact_view(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -49,18 +49,25 @@ def contact_view(request):
 
         subject = f"New Contact Form Submission from {name}"
         body = f"""
-        You received a new message:
+You received a new message:
 
-        Name: {name}
-        Email: {email}
-        Message: {message}
-        """
+Name: {name}
+Email: {email}
+Message: {message}
+"""
 
         try:
-            send_mail(subject, body, email, ["nalehcosmetics@gmail.com"])
+            send_mail(
+                subject,
+                body,
+                settings.DEFAULT_FROM_EMAIL,                   # ✔ correct sender
+                ["nalehcosmetics@gmail.com"],                # ✔ your inbox
+                headers={"Reply-To": email},                 # ✔ allows reply to user
+                fail_silently=False
+            )
             messages.success(request, "✅ Message sent successfully!")
-        except:
-            messages.error(request, "❌ Failed to send message. Please try again.")
+        except Exception as e:
+            messages.error(request, f"❌ Failed to send message: {e}")
 
         return redirect("contact")
 
@@ -110,5 +117,6 @@ def feedback_view(request):
         return redirect("feedback")
 
     return render(request, "feedback.html")
+
 
 
