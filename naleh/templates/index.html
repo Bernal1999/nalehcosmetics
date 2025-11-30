@@ -286,6 +286,26 @@
 </div>
 
 
+<!-- ===================== ADD TO CART POPUP ===================== -->
+<div class="modal fade" id="cartPopupModal">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content bg-dark text-white text-center p-3">
+
+      <h6 class="mb-3">✔ Added to Cart</h6>
+
+      <button id="popup-view-cart" class="btn btn-success w-100 mb-2">
+        View Cart
+      </button>
+
+      <button class="btn btn-secondary w-100" data-bs-dismiss="modal">
+        Continue Shopping
+      </button>
+
+    </div>
+  </div>
+</div>
+
+
 
 <!-- ===================== JAVASCRIPT ===================== -->
 <script>
@@ -293,6 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const cartItemsList = document.getElementById("cart-items");
   const cartTotal = document.getElementById("cart-total");
+  const popupModal = new bootstrap.Modal("#cartPopupModal");
 
   let cart = {};
 
@@ -324,7 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* -------------------- THUMBNAIL CLICK -------------------- */
+  /* -------------------- THUMBNAIL SWITCH -------------------- */
   document.addEventListener("click", e => {
     if (e.target.classList.contains("thumb-img")) {
       document.getElementById("modal-image").src = e.target.src;
@@ -344,14 +365,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       updateCartUI();
 
-      /* 🔥 FIX: Close modal automatically */
-      const modalEl = document.getElementById("productModal");
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      if (modal) modal.hide();
-
-      /* Open Cart */
-      new bootstrap.Offcanvas("#cartOffcanvas").show();
+      /* Show popup over current modal */
+      popupModal.show();
     }
+  });
+
+  /* -------------------- POPUP BUTTON: VIEW CART -------------------- */
+  document.getElementById("popup-view-cart").addEventListener("click", () => {
+    popupModal.hide();
+    new bootstrap.Offcanvas("#cartOffcanvas").show();
   });
 
   /* -------------------- UPDATE CART UI -------------------- */
@@ -406,6 +428,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+
 
 <div class="container mt-4 p-2">
   <div class="row align-items-center">
@@ -613,6 +636,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   {% endblock %}
+
 
 
 
