@@ -202,7 +202,7 @@
             View
           </button>
 
-          <!-- 🛒 Add to Cart (FIXED: added title & price) -->
+          <!-- 🛒 Add to Cart -->
           <button class="btn btn-danger btn-sm add-to-cart-btn mt-auto"
                   data-id="{{ product.id }}"
                   data-title="{{ product.title }}"
@@ -275,7 +275,6 @@
       <div class="modal-footer border-secondary">
         <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
-        <!-- Add to Cart from modal -->
         <button class="btn btn-danger add-to-cart-btn" id="modal-add-to-cart"
                 data-id="" data-title="" data-price="">
           Add to Cart
@@ -288,12 +287,10 @@
 
 
 
-
 <!-- ===================== JAVASCRIPT ===================== -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const cartCount = document.getElementById("cart-count");
   const cartItemsList = document.getElementById("cart-items");
   const cartTotal = document.getElementById("cart-total");
 
@@ -321,11 +318,9 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("thumb2").src = img2;
       document.getElementById("thumb3").src = img3;
 
-      // Fix: assign correct data values
-      const mBtn = document.getElementById("modal-add-to-cart");
-      mBtn.dataset.id = id;
-      mBtn.dataset.title = title;
-      mBtn.dataset.price = price;
+      document.getElementById("modal-add-to-cart").dataset.id = id;
+      document.getElementById("modal-add-to-cart").dataset.title = title;
+      document.getElementById("modal-add-to-cart").dataset.price = price;
     });
   });
 
@@ -344,17 +339,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const title = e.target.dataset.title;
       const price = parseFloat(e.target.dataset.price);
 
-      if (!title || !price) {
-        console.error("Add to cart failed: missing title/price.");
-        return;
-      }
-
       if (cart[id]) cart[id].qty++;
       else cart[id] = { title, price, qty: 1 };
 
       updateCartUI();
 
-      // Auto open cart
+      /* 🔥 FIX: Close modal automatically */
+      const modalEl = document.getElementById("productModal");
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) modal.hide();
+
+      /* Open Cart */
       new bootstrap.Offcanvas("#cartOffcanvas").show();
     }
   });
@@ -368,8 +363,8 @@ document.addEventListener("DOMContentLoaded", () => {
       total += item.price * item.qty;
 
       const li = document.createElement("li");
-      li.className = "list-group-item bg-dark text-white border-secondary d-flex justify-content-between";
-
+      li.className =
+        "list-group-item bg-dark text-white border-secondary d-flex justify-content-between";
       li.innerHTML = `${item.title} - ₹${item.price} <span class="badge bg-danger">x ${item.qty}</span>`;
       cartItemsList.appendChild(li);
     });
@@ -411,7 +406,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
-
 
 <div class="container mt-4 p-2">
   <div class="row align-items-center">
@@ -619,6 +613,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   {% endblock %}
+
 
 
 
